@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BlazingFoodDelivery.Server.Data;
+using BlazingFoodDelivery.Server.Services.MenuItemService;
 using BlazingFoodDelivery.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,18 +15,18 @@ namespace BlazingFoodDelivery.Server.Controllers
     [ApiController]
     public class MenuItemController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IMenuItemService _menuItemService;
 
-        public MenuItemController(DataContext context)
+        public MenuItemController(IMenuItemService menuItemService)
         {
-            _context = context;
+            _menuItemService = menuItemService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<MenuItem>>> GetMenuItem()
+        public async Task<ActionResult<ServiceResponse<List<MenuItem>>>> GetMenuItems()
         {
-            var menuItems = await _context.MenuItems.ToListAsync();
-            return Ok(menuItems);
+            var result = await _menuItemService.GetMenuItemsAsync();
+            return Ok(result);
         }
     }
 }

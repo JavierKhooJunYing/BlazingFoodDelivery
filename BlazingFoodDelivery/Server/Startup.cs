@@ -1,5 +1,6 @@
 using System.Linq;
 using BlazingFoodDelivery.Server.Data;
+using BlazingFoodDelivery.Server.Services.MenuItemService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,6 +31,7 @@ namespace BlazingFoodDelivery.Server
             });
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddScoped<IMenuItemService, MenuItemService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
