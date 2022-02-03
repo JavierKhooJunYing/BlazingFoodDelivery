@@ -1,0 +1,31 @@
+﻿@inject HttpClient Http 
+
+<ul class="list-unstyled">
+    @foreach (var menuItem in MenuItems)
+    {
+        <li class="media my-3">
+            <div class="media-img-wrapper mr-2">
+                <a href="#">
+                    <img class="media-img" src="@menuItem.ImageUrl" alt="@menuItem.Title" />
+                </a>
+            </div>
+            <div class="media-body">
+                <a href="#">
+                    <h4 class="mb-0">@menuItem.Title</h4>
+                </a>
+                <p>@menuItem.Description</p>
+                <h5 class="price">S$@menuItem.Price</h5>
+            </div>
+        </li>
+    }
+</ul> 
+
+@code {
+
+    private static List<MenuItem> MenuItems = new List<MenuItem>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        MenuItems = await Http.GetFromJsonAsync<List<MenuItem>>("api/menuitem");
+    }
+}
