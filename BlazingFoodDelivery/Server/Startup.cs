@@ -1,5 +1,7 @@
 using System.Linq;
 using BlazingFoodDelivery.Server.Data;
+using BlazingFoodDelivery.Server.Services.CartService;
+using BlazingFoodDelivery.Server.Services.CategoryService;
 using BlazingFoodDelivery.Server.Services.MenuItemService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,6 +34,8 @@ namespace BlazingFoodDelivery.Server
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddScoped<IMenuItemService, MenuItemService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICartService, CartService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

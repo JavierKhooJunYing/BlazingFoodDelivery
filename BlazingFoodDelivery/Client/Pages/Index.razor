@@ -1,5 +1,37 @@
 ﻿@page "/"
+@page "/{categoryUrl}"
+@page "/search/{searchText}/{page:int}"
+@inject IMenuItemService MenuItemService
 
-<h3>Pezzo SG</h3>
+@if (SearchText == null && CategoryUrl == null)
+{
+    <FeaturedMenuItems />
+}
+else
+{
+    <MenuItemList />
+}
 
-<MenuItemList />
+@code {
+
+    [Parameter]
+    public string CategoryUrl { get; set; } = null;
+
+    [Parameter]
+    public string SearchText { get; set; } = null;
+
+    [Parameter]
+    public int Page { get; set; } = 1;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (SearchText != null)
+        {
+            await MenuItemService.SearchMenuItems(SearchText, Page);
+        }
+        else
+        {
+            await MenuItemService.GetMenuItems(CategoryUrl);
+        }      
+    }
+}

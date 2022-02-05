@@ -1,0 +1,42 @@
+﻿@inject IMenuItemService MenuItemService
+@implements IDisposable
+
+<center><h2>Top Menu Items of Today</h2></center>
+
+@if (MenuItemService.MenuItems == null || MenuItemService.MenuItems.Count == 0)
+{
+    <span>@MenuItemService.Message</span>
+}
+else
+{
+    <div class="containerr">
+        @foreach (var menuItem in MenuItemService.MenuItems)
+        {
+            @if (menuItem.Featured)
+            {
+                <div class="featured-product">
+                    <div>
+                        <a href="menuItem/@menuItem.Id">
+                            <img src="@menuItem.ImageUrl" />
+                        </a>
+                    </div>
+                    <h4><a href="menuItem/@menuItem.Id">@menuItem.Title</a></h4>
+                    <h5 class="price">S$@menuItem.Price</h5>
+                </div>
+            }
+        }
+    </div>
+}
+
+@code {        
+
+    protected override void OnInitialized()
+    {
+        MenuItemService.MenuItemsChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        MenuItemService.MenuItemsChanged -= StateHasChanged;
+    }
+}

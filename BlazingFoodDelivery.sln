@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazingFoodDelivery.Server", "BlazingFoodDelivery\Server\BlazingFoodDelivery.Server.csproj", "{41D21A86-11EF-40A9-A720-29EA60EB5A25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazingFoodDelivery.Server", "BlazingFoodDelivery\Server\BlazingFoodDelivery.Server.csproj", "{41D21A86-11EF-40A9-A720-29EA60EB5A25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazingFoodDelivery.Client", "BlazingFoodDelivery\Client\BlazingFoodDelivery.Client.csproj", "{100E8F15-857A-460C-AB71-57956ADFFB16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazingFoodDelivery.Client", "BlazingFoodDelivery\Client\BlazingFoodDelivery.Client.csproj", "{100E8F15-857A-460C-AB71-57956ADFFB16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazingFoodDelivery.Shared", "BlazingFoodDelivery\Shared\BlazingFoodDelivery.Shared.csproj", "{A02F9547-CA90-4E89-8BDF-61B591AB64AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazingFoodDelivery.Shared", "BlazingFoodDelivery\Shared\BlazingFoodDelivery.Shared.csproj", "{A02F9547-CA90-4E89-8BDF-61B591AB64AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,60 @@
+﻿@page "/menuitem/{id:int}"
+@inject IMenuItemService MenuItemService
+@inject ICartService CartService
+
+@if (menuItem == null)
+{
+    <span>@message</span>
+}
+else
+{
+    <div class="media">
+        <div class="media-img-wrapper mr-2">
+            <img class="media-img" src="@menuItem.ImageUrl" alt="@menuItem.Title" />
+        </div>
+        <div class="media-body">
+            <h2 class="mb-0">@menuItem.Title</h2>
+            <p>@menuItem.Description</p>
+            <h4 class="price">S$@menuItem.Price</h4>
+            <button class="btn btn-primary" @onclick="AddToCart">
+                <i class="oi oi-cart"></i>
+                &nbsp;&nbsp;&nbsp;Add To Cart
+            </button>
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private MenuItem? menuItem = null;
+    private string message = string.Empty;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        message = "Loading Menu Item...";
+
+        var result = await MenuItemService.GetMenuItem(Id);
+        if (!result.Success)
+        {
+            message = result.Message;
+        }
+        else
+        {
+            menuItem = result.Data;
+        }
+
+    }
+
+    private async Task AddToCart()
+    {
+        var cartItem = new CartItem
+        {
+            MenuItemId = menuItem.Id
+        };
+
+        await CartService.AddToCart(cartItem);
+    }
+}

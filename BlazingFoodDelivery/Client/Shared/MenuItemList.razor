@@ -1,8 +1,9 @@
 ﻿@inject IMenuItemService MenuItemService 
+@implements IDisposable
 
 @if (MenuItemService.MenuItems == null || MenuItemService.MenuItems.Count == 0)
 {
-    <span>Loading Menu Items...</span>
+    <span>@MenuItemService.Message</span>
 }
 else
 {
@@ -11,12 +12,12 @@ else
         {
             <li class="media my-3">
                 <div class="media-img-wrapper mr-2">
-                    <a href="#">
+                    <a href="/menuitem/@menuItem.Id">
                         <img class="media-img" src="@menuItem.ImageUrl" alt="@menuItem.Title" />
                     </a>
                 </div>
                 <div class="media-body">
-                    <a href="#">
+                    <a href="/menuitem/@menuItem.Id">
                         <h4 class="mb-0">@menuItem.Title</h4>
                     </a>
                     <p>@menuItem.Description</p>
@@ -25,12 +26,24 @@ else
             </li>
         }
     </ul>
+    for (var i = 1; i <= MenuItemService.PageCount; i++)
+    {
+        <a class="btn
+                  @(i == MenuItemService.CurrentPage ? "btn-info" : "btn-outline-info")
+                  page-selection"
+                  href="/search/@MenuItemService.LastSearchText/@i">@i</a>
+    }
 }
  
 @code {
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        await MenuItemService.GetMenuItems();
+        MenuItemService.MenuItemsChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        MenuItemService.MenuItemsChanged -= StateHasChanged;
     }
 }
