@@ -4,6 +4,7 @@ using BlazingFoodDelivery.Server.Services.AuthService;
 using BlazingFoodDelivery.Server.Services.CartService;
 using BlazingFoodDelivery.Server.Services.CategoryService;
 using BlazingFoodDelivery.Server.Services.MenuItemService;
+using BlazingFoodDelivery.Server.Services.OrderService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,6 +41,7 @@ namespace BlazingFoodDelivery.Server
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -53,6 +55,7 @@ namespace BlazingFoodDelivery.Server
                         ValidateAudience = false
                     };
                 });
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

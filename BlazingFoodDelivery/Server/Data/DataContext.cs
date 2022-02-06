@@ -16,6 +16,12 @@ namespace BlazingFoodDelivery.Server.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<CartItem>()
+                .HasKey(ci => new { ci.UserId, ci.MenuItemId });
+
+            modelBuilder.Entity<OrderItem>()
+                .HasKey(oi => new { oi.OrderId, oi.MenuItemId });
+
             modelBuilder.Entity<Category>().HasData(
                 new Category
                 {
@@ -180,5 +186,8 @@ namespace BlazingFoodDelivery.Server.Data
         public DbSet<MenuItem> MenuItems { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
     }
 }
