@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BlazingFoodDelivery.Server.Data;
 using BlazingFoodDelivery.Server.Services.MenuItemService;
 using BlazingFoodDelivery.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,34 @@ namespace BlazingFoodDelivery.Server.Controllers
         public MenuItemController(IMenuItemService menuItemService)
         {
             _menuItemService = menuItemService;
+        }
+
+        [HttpGet("admin"), Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ServiceResponse<List<MenuItem>>>> GetAdminMenuItems()
+        {
+            var result = await _menuItemService.GetAdminMenuItems();
+            return Ok(result);
+        }
+
+        [HttpPost("admin"), Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ServiceResponse<MenuItem>>> CreateMenuItem(MenuItem menuItem)
+        {
+            var result = await _menuItemService.CreateMenuItem(menuItem);
+            return Ok(result);
+        }
+
+        [HttpDelete("{id}"), Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ServiceResponse<bool>>> DeleteMenuItem(int id)
+        {
+            var result = await _menuItemService.DeleteMenuItem(id);
+            return Ok(result);
+        }
+
+        [HttpPut("admin"), Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ServiceResponse<MenuItem>>> UpdateMenuItem(MenuItem menuItem)
+        {
+            var result = await _menuItemService.UpdateMenuItem(menuItem);
+            return Ok(result);
         }
 
         [HttpGet]

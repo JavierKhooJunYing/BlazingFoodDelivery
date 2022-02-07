@@ -1,0 +1,133 @@
+﻿@page "/admin/menuitem"
+@page "/admin/menuitem/{id:int}"
+@inject IMenuItemService MenuItemService
+@inject ICategoryService CategoryService
+@inject NavigationManager NavigationManager   
+@inject IJSRuntime JSRunTime  
+
+@if (loading)
+{
+    <span>@msg</span>
+}
+else
+{
+    @if (menuItem.Editing)
+    {
+        <h3>Edit "@menuItem.Title"</h3>
+    }
+    else if (menuItem.IsNew)
+    {
+        <h3>Create a new Menu Item</h3>
+    }
+
+    <EditForm Model="menuItem" OnValidSubmit="AddOrUpdateMenuItem">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <div class="mb-0">
+            <label for="title">Title</label>
+            <InputText id="title" @bind-Value="menuItem.Title" class="form-control"></InputText>
+        </div>
+        <div class="mb-0">
+            <label for="imageUrl">Image Url</label>
+            <InputText id="imageUrl" @bind-Value="menuItem.ImageUrl" class="form-control"></InputText>
+        </div>
+        <div class="mb-0">
+            <img src="@menuItem.ImageUrl" />
+        </div>
+        <div class="mb-0">
+            <label for="description">Description</label>
+            <InputTextArea id="description" @bind-Value="menuItem.Description" class="form-control"></InputTextArea>
+        </div>
+        <hr />    
+        <div class="mb-0">
+            <label for="category">Category</label>
+            <InputSelect id="category" @bind-Value="menuItem.CategoryId" class="form-control">
+            @foreach (var category in CategoryService.AdminCategories)
+            {
+                <option value="@category.Id">@category.Name</option>
+            }
+            </InputSelect>
+        </div>
+        <hr />
+        <div class="form-check">
+            <InputCheckbox id="featured" @bind-Value="menuItem.Featured" class="form-check-input"></InputCheckbox>
+            <label for="featured" class="form-check-label">Featured</label>
+        </div>
+        <div class="form-check">
+            <InputCheckbox id="visible" @bind-Value="menuItem.Visible" class="form-check-input"></InputCheckbox>
+            <label for="visible" class="form-check-label">Visible</label>
+        </div>    
+        <hr />
+        <button type="submit" class="btn btn-primary float-right">@btnText</button>
+        <ValidationSummary></ValidationSummary>
+    </EditForm>
+
+    @if (!menuItem.IsNew)
+    {
+        <button type="button" class="btn btn-danger float-left" @onclick="DeleteMenuItem">
+            Delete Menu Item
+        </button>
+    }
+}
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    MenuItem menuItem = new MenuItem();
+    bool loading = true;
+    string btnText = "";
+    string msg = "Loading...";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CategoryService.GetAdminCategories();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id == 0)
+        {
+            menuItem = new MenuItem { IsNew = true };
+            btnText = "Create Menu Item";
+        }
+        else
+        {
+            MenuItem dbMenuItem = (await MenuItemService.GetMenuItem(Id)).Data;
+            if (dbMenuItem == null)
+            {
+                msg = $"Menu Item with Id '{Id}' does not exist!";
+                return;
+            }
+            menuItem = dbMenuItem;
+            menuItem.Editing = true;
+            btnText = "Update Menu Item";
+        }
+        loading = false;
+    }
+
+    async void AddOrUpdateMenuItem()
+    {
+        if (menuItem.IsNew)
+        {
+            var result = await MenuItemService.CreateMenuItem(menuItem);
+            NavigationManager.NavigateTo($"admin/menuitem/{result.Id}");
+        }
+        else
+        {
+            menuItem.IsNew = false;
+            menuItem = await MenuItemService.UpdateMenuItem(menuItem);
+            NavigationManager.NavigateTo($"admin/menuitem/{menuItem.Id}", true);
+        }
+    }
+
+    async void DeleteMenuItem()
+    {
+        bool confirmed = await JSRunTime.InvokeAsync<bool>("confirm", $"Do you really want to delete '{menuItem.Title}'?");
+        if (confirmed)
+        {
+            await MenuItemService.DeleteMenuItem(menuItem);
+            NavigationManager.NavigateTo("admin/menuitems");
+        }
+    }
+}

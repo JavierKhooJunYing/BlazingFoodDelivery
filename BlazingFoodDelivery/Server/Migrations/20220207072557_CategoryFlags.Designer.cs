@@ -4,14 +4,16 @@ using BlazingFoodDelivery.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BlazingFoodDelivery.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220207072557_CategoryFlags")]
+    partial class CategoryFlags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,9 +136,6 @@ namespace BlazingFoodDelivery.Server.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("Deleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -150,11 +149,7 @@ namespace BlazingFoodDelivery.Server.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Visible")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -167,181 +162,151 @@ namespace BlazingFoodDelivery.Server.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            Deleted = false,
                             Description = "Turkey bacon and sweet pineapples topped with 100% imported Italian mozzarella cheese.",
                             Featured = true,
                             ImageUrl = "images/aloha.jpg",
                             Price = 10.90m,
-                            Title = "Aloha",
-                            Visible = true
+                            Title = "Aloha"
                         },
                         new
                         {
                             Id = 2,
                             CategoryId = 1,
-                            Deleted = false,
                             Description = "Beef pepperoni topped with 100% imported Italian mozzarella cheese.",
                             Featured = false,
                             ImageUrl = "images/pepperoni.jpg",
                             Price = 10.90m,
-                            Title = "Pepperoni",
-                            Visible = true
+                            Title = "Pepperoni"
                         },
                         new
                         {
                             Id = 3,
                             CategoryId = 1,
-                            Deleted = false,
                             Description = "Grilled oregano chicken strips loaded with roasted red peppers, parmesa and 100% imported Italian mozzarella cheese.",
                             Featured = false,
                             ImageUrl = "images/sanRemo.jpg",
                             Price = 10.90m,
-                            Title = "San Remo",
-                            Visible = true
+                            Title = "San Remo"
                         },
                         new
                         {
                             Id = 4,
                             CategoryId = 1,
-                            Deleted = false,
                             Description = "Home-made teriyaki sauce, oregano chicken, olive oil, white onions with 100% imported Italian mozzarella cheese.",
                             Featured = false,
                             ImageUrl = "images/teriyakiChicken.jpg",
                             Price = 10.90m,
-                            Title = "Teriyaki Chicken",
-                            Visible = true
+                            Title = "Teriyaki Chicken"
                         },
                         new
                         {
                             Id = 5,
                             CategoryId = 1,
-                            Deleted = false,
                             Description = "Tomatoes, fresh basil leaves, olive oil, topped with 100% imported Italian mozzarella cheese.",
                             Featured = false,
                             ImageUrl = "images/margherita.jpg",
                             Price = 10.90m,
-                            Title = "Margherita",
-                            Visible = true
+                            Title = "Margherita"
                         },
                         new
                         {
                             Id = 6,
                             CategoryId = 1,
-                            Deleted = false,
                             Description = "Made with freshly handmade dough, topped with our handmade pizza sauce and secret spices and completed with 100% imported Italian mozzarella cheese.",
                             Featured = false,
                             ImageUrl = "images/cheese.jpg",
                             Price = 10.90m,
-                            Title = "Cheese",
-                            Visible = true
+                            Title = "Cheese"
                         },
                         new
                         {
                             Id = 7,
                             CategoryId = 2,
-                            Deleted = false,
                             Description = "Delicious and refreshing since 1886.",
                             Featured = false,
                             ImageUrl = "images/cocaCola.png",
                             Price = 2.90m,
-                            Title = "Coca-Cola",
-                            Visible = true
+                            Title = "Coca-Cola"
                         },
                         new
                         {
                             Id = 8,
                             CategoryId = 2,
-                            Deleted = false,
                             Description = "100% real brewed from selected premium tea leaves, POKKA Jasmine Green Tea delivers the superior taste you have come to love. Its blend of aromatic jasmine with the highest quality green tea promises a refreshing enjoyment with natural antioxidant goodness.",
                             Featured = false,
                             ImageUrl = "images/greenTea.jpg",
                             Price = 2.90m,
-                            Title = "Green Tea",
-                            Visible = true
+                            Title = "Green Tea"
                         },
                         new
                         {
                             Id = 9,
                             CategoryId = 2,
-                            Deleted = false,
                             Description = "A full-bodied infusion of black tea with rich cocoa undertones.",
                             Featured = false,
                             ImageUrl = "images/tea.jpg",
                             Price = 2.90m,
-                            Title = "Hot Tea",
-                            Visible = true
+                            Title = "Hot Tea"
                         },
                         new
                         {
                             Id = 10,
                             CategoryId = 2,
-                            Deleted = false,
                             Description = "Enjoy our rich, flavorful brewed coffees any time of the day. Easy-drinking on its own and delicious with milk and sugar.",
                             Featured = false,
                             ImageUrl = "images/coffee.jpg",
                             Price = 2.90m,
-                            Title = "Hot Coffee",
-                            Visible = true
+                            Title = "Hot Coffee"
                         },
                         new
                         {
                             Id = 11,
                             CategoryId = 2,
-                            Deleted = false,
                             Description = "There’s no question chocolate and coffee are flavors that meant for each other. Both are rich and full of depth. Where one is creamy, the other is roasty. They complement each other perfectly. And when they come together under a fluffy cloud of sweetened whipped cream, you’ll wish their union would last forever.",
                             Featured = true,
                             ImageUrl = "images/mocha.jpg",
                             Price = 5.90m,
-                            Title = "Caffè Mocha",
-                            Visible = true
+                            Title = "Caffè Mocha"
                         },
                         new
                         {
                             Id = 12,
                             CategoryId = 2,
-                            Deleted = false,
                             Description = "DASANI® combines the process of reverse osmosis filtration with a proprietary blend of minerals to create fresh, clean, and premium tasting water that is pure and delicious.",
                             Featured = false,
                             ImageUrl = "images/dasani.jpg",
                             Price = 1.90m,
-                            Title = "Dasani Water (600ML)",
-                            Visible = true
+                            Title = "Dasani Water (600ML)"
                         },
                         new
                         {
                             Id = 13,
                             CategoryId = 3,
-                            Deleted = false,
                             Description = "Rich and moist with oozing Belgian chocolate lava inside.",
                             Featured = true,
                             ImageUrl = "images/chocLavaCake.jpg",
                             Price = 8.90m,
-                            Title = "Hot Chocolate Lava Cake",
-                            Visible = true
+                            Title = "Hot Chocolate Lava Cake"
                         },
                         new
                         {
                             Id = 14,
                             CategoryId = 3,
-                            Deleted = false,
                             Description = "It is made of ladyfingers dipped in coffee, layered with a whipped mixture of eggs, sugar, and mascarpone cheese, flavoured with cocoa.",
                             Featured = false,
                             ImageUrl = "images/tiramisu.jpg",
                             Price = 8.90m,
-                            Title = "Tiramisu",
-                            Visible = true
+                            Title = "Tiramisu"
                         },
                         new
                         {
                             Id = 15,
                             CategoryId = 3,
-                            Deleted = false,
                             Description = "Our delicious take on the lemon meringue pie – A sweet, tangy tango of lemon curd, cheesecake, and a beautifully torched meringue.",
                             Featured = false,
                             ImageUrl = "images/lemonMeringue.jpg",
                             Price = 8.90m,
-                            Title = "Lemon Meringue Cheesecake",
-                            Visible = true
+                            Title = "Lemon Meringue Cheesecake"
                         });
                 });
 

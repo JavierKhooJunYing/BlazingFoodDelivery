@@ -22,7 +22,21 @@ namespace BlazingFoodDelivery.Client.Services.MenuItemService
         public int CurrentPage { get; set; } = 1;
         public int PageCount { get; set; } = 0;
         public string LastSearchText { get; set; } = string.Empty;
+        public List<MenuItem> AdminMenuItems { get; set; } 
+
         public event Action MenuItemsChanged;
+
+        public async Task GetAdminMenuItems()
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<List<MenuItem>>>("api/menuitem/admin");
+            AdminMenuItems = result.Data;
+            CurrentPage = 1;
+            PageCount = 0;
+            if (AdminMenuItems.Count == 0)
+            {
+                Message = "No items found.";
+            }
+        }
 
         public async Task GetMenuItems(string categoryUrl = null)
         {
@@ -72,6 +86,24 @@ namespace BlazingFoodDelivery.Client.Services.MenuItemService
         {
             var result = await _http.GetFromJsonAsync<ServiceResponse<List<string>>>($"api/menuitem/searchsuggestions/{searchText}");
             return result.Data;
+        }
+
+        public async Task<MenuItem> CreateMenuItem(MenuItem menuItem)
+        {
+            var result = await _http.PostAsJsonAsync("api/menuitem", menuItem);
+            var newMenuItem = (await result.Content.ReadFromJsonAsync<ServiceResponse<MenuItem>>()).Data;
+            return newMenuItem;
+        }
+
+        public async Task<MenuItem> UpdateMenuItem(MenuItem menuItem)
+        {
+            var result = await _http.PutAsJsonAsync($"api/menuitem", menuItem);
+            return (await result.Content.ReadFromJsonAsync<ServiceResponse<MenuItem>>()).Data;
+        }
+
+        public async Task DeleteMenuItem(MenuItem menuItem)
+        {
+            var result = await _http.DeleteAsync($"api/menuItem/{menuItem.Id}");
         }
     }
 }

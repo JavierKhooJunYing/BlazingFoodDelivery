@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BlazingFoodDelivery.Server.Data;
 using BlazingFoodDelivery.Shared;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlazingFoodDelivery.Server.Services.MenuItemService
@@ -11,17 +12,29 @@ namespace BlazingFoodDelivery.Server.Services.MenuItemService
     public class MenuItemService : IMenuItemService
     {
         private readonly DataContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MenuItemService(DataContext context)
+        public MenuItemService(DataContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        public async Task<ServiceResponse<List<MenuItem>>> GetAdminMenuItems()
+        {
+            var response = new ServiceResponse<List<MenuItem>>
+            {
+                Data = await _context.MenuItems.Where(p => !p.Deleted).ToListAsync()
+            };
+
+            return response;
         }
 
         public async Task<ServiceResponse<List<MenuItem>>> GetMenuItemsAsync()
         {
             var response = new ServiceResponse<List<MenuItem>>
             {
-                Data = await _context.MenuItems.ToListAsync()
+                Data = await _context.MenuItems.Where(p => p.Visible && !p.Deleted).ToListAsync()
             };
 
             return response;
@@ -30,7 +43,19 @@ namespace BlazingFoodDelivery.Server.Services.MenuItemService
         public async Task<ServiceResponse<MenuItem>> GetMenuItemAsync(int menuItemId)
         {
             var response = new ServiceResponse<MenuItem>();
-            var menuItem = await _context.MenuItems.FindAsync(menuItemId);
+            //var menuItem = await _context.MenuItems.FindAsync(menuItemId);
+            MenuItem menuItem = null;
+
+            if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
+            {
+                menuItem = await _context.MenuItems
+                    .FirstOrDefaultAsync(p => p.Id == menuItemId && !p.Deleted);
+            }
+            else
+            {
+                menuItem = await _context.MenuItems
+                    .FirstOrDefaultAsync(p => p.Id == menuItemId && p.Visible && !p.Deleted);
+            }
 
             if (menuItem == null)
             {
@@ -50,7 +75,7 @@ namespace BlazingFoodDelivery.Server.Services.MenuItemService
             var response = new ServiceResponse<List<MenuItem>>
             {
                 Data = await _context.MenuItems
-                    .Where(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower()))
+                    .Where(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower()) && p.Visible && !p.Deleted)
                     .ToListAsync()
             };
 
@@ -62,7 +87,8 @@ namespace BlazingFoodDelivery.Server.Services.MenuItemService
             return await _context.MenuItems
                                 .Where(p => p.Title.ToLower().Contains(searchText.ToLower())
                                 ||
-                                p.Description.ToLower().Contains(searchText.ToLower()))
+                                p.Description.ToLower().Contains(searchText.ToLower())
+                                && p.Visible && !p.Deleted)
                                 .ToListAsync();
         }
 
@@ -73,7 +99,8 @@ namespace BlazingFoodDelivery.Server.Services.MenuItemService
             var menuItems = await _context.MenuItems
                                 .Where(p => p.Title.ToLower().Contains(searchText.ToLower())
                                 ||
-                                p.Description.ToLower().Contains(searchText.ToLower()))
+                                p.Description.ToLower().Contains(searchText.ToLower())
+                                && p.Visible && !p.Deleted)
                                 .Skip((page - 1) * (int)pageResults)
                                 .Take((int)pageResults)
                                 .ToListAsync();
@@ -127,11 +154,60 @@ namespace BlazingFoodDelivery.Server.Services.MenuItemService
             var response = new ServiceResponse<List<MenuItem>>
             {
                 Data = await _context.MenuItems
-                    .Where(p => p.Featured)
+                    .Where(p => p.Featured && p.Visible && !p.Deleted)
                     .ToListAsync()
             };
 
             return response;
+        }
+
+        public async Task<ServiceResponse<MenuItem>> CreateMenuItem(MenuItem menuItem)
+        {
+            _context.Add(menuItem);
+            await _context.SaveChangesAsync();
+
+            return new ServiceResponse<MenuItem> { Data = menuItem };
+        }
+
+        public async Task<ServiceResponse<MenuItem>> UpdateMenuItem(MenuItem menuItem)
+        {
+            var dbMenuItem = await _context.MenuItems.FindAsync(menuItem.Id);
+            if (dbMenuItem == null)
+            {
+                return new ServiceResponse<MenuItem>
+                {
+                    Success = false,
+                    Message = "Item not found."
+                };
+            }
+
+            dbMenuItem.Title = menuItem.Title;
+            dbMenuItem.Description = menuItem.Description;
+            dbMenuItem.ImageUrl = menuItem.ImageUrl;
+            dbMenuItem.CategoryId = menuItem.CategoryId;
+            dbMenuItem.Visible = menuItem.Visible;
+            dbMenuItem.Featured = menuItem.Featured;
+
+            await _context.SaveChangesAsync();
+            return new ServiceResponse<MenuItem> { Data = menuItem };
+        }
+
+        public async Task<ServiceResponse<bool>> DeleteMenuItem(int menuItemId)
+        {
+            var dbMenuItem = await _context.MenuItems.FindAsync(menuItemId);
+            if (dbMenuItem == null)
+            {
+                return new ServiceResponse<bool>
+                {
+                    Success = false,
+                    Message = "Item not found."
+                };
+            }
+
+            dbMenuItem.Deleted = true;
+
+            await _context.SaveChangesAsync();
+            return new ServiceResponse<bool> { Data = true };
         }
     }
 }

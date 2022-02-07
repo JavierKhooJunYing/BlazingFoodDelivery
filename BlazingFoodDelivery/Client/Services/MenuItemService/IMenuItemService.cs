@@ -10,6 +10,7 @@ namespace BlazingFoodDelivery.Client.Services.MenuItemService
     {
         event Action MenuItemsChanged;
         List<MenuItem> MenuItems { get; set; }
+        List<MenuItem> AdminMenuItems { get; set; }
         string Message { get; set; }
         int CurrentPage { get; set; }
         int PageCount { get; set; }
@@ -18,5 +19,9 @@ namespace BlazingFoodDelivery.Client.Services.MenuItemService
         Task<ServiceResponse<MenuItem>> GetMenuItem(int menuItemId);
         Task SearchMenuItems(string searchText, int page);
         Task<List<string>> GetMenuItemSearchSuggestions(string searchText);
+        Task GetAdminMenuItems();
+        Task<MenuItem> CreateMenuItem(MenuItem menuItem);
+        Task<MenuItem> UpdateMenuItem(MenuItem menuItem);
+        Task DeleteMenuItem(MenuItem menuItem);
     }
 }

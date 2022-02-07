@@ -14,5 +14,9 @@ namespace BlazingFoodDelivery.Server.Services.MenuItemService
         Task<ServiceResponse<MenuItemSearchResult>> SearchMenuItems(string searchText, int page);
         Task<ServiceResponse<List<string>>> GetMenuItemSearchSuggestions(string searchText);
         Task<ServiceResponse<List<MenuItem>>> GetFeaturedMenuItems();
+        Task<ServiceResponse<List<MenuItem>>> GetAdminMenuItems();
+        Task<ServiceResponse<MenuItem>> CreateMenuItem(MenuItem menuItem);
+        Task<ServiceResponse<MenuItem>> UpdateMenuItem(MenuItem menuItem);
+        Task<ServiceResponse<bool>> DeleteMenuItem(int menuItemId);
     }
 }
