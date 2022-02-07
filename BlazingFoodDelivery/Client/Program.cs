@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using BlazingFoodDelivery.Client.Services.AddressService;
 using BlazingFoodDelivery.Client.Services.AuthService;
 using BlazingFoodDelivery.Client.Services.CartService;
 using BlazingFoodDelivery.Client.Services.CategoryService;
@@ -31,6 +32,7 @@ namespace BlazingFoodDelivery.Client
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<IAddressService, AddressService>();
             builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore();
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();

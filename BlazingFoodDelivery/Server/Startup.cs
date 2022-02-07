@@ -1,5 +1,6 @@
 using System.Linq;
 using BlazingFoodDelivery.Server.Data;
+using BlazingFoodDelivery.Server.Services.AddressService;
 using BlazingFoodDelivery.Server.Services.AuthService;
 using BlazingFoodDelivery.Server.Services.CartService;
 using BlazingFoodDelivery.Server.Services.CategoryService;
@@ -42,6 +43,7 @@ namespace BlazingFoodDelivery.Server
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IAddressService, AddressService>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
